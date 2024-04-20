@@ -45,10 +45,16 @@ conn.close()
 @app.route('/')
 @login_required
 def home():
-    return 'Hello, World!'
+    return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         return 'POST'
     return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        return 'POST'
+    return render_template('register.html')
