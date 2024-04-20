@@ -16,6 +16,22 @@ Session(app)
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
+
+# c.execute(""" 
+#     CREATE TABLE IF NOT EXISTS recipes (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         user_id INTEGER,
+#         name TEXT NOT NULL,
+#         description TEXT,
+#         total_time INTEGER,
+#         category TEXT,
+#         instructions TEXT,
+#         difficulty INTEGER,
+#         rating INTEGER,
+#         price TEXT,
+#         last_cooked TEXT,
+#         FOREIGN KEY(user_id) REFERENCES users(id)
+#     )""")
 # Implement thread-specific db connection
 @app.before_request
 def before_request():
@@ -102,3 +118,4 @@ def logout():
 # Close the database connection when the application is terminated
 conn.commit()
 conn.close()
+
