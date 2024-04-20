@@ -16,22 +16,6 @@ Session(app)
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
-
-# c.execute(""" 
-#     CREATE TABLE IF NOT EXISTS recipes (
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         user_id INTEGER,
-#         name TEXT NOT NULL,
-#         description TEXT,
-#         total_time INTEGER,
-#         category TEXT,
-#         instructions TEXT,
-#         difficulty INTEGER,
-#         rating INTEGER,
-#         price TEXT,
-#         last_cooked TEXT,
-#         FOREIGN KEY(user_id) REFERENCES users(id)
-#     )""")
 # Implement thread-specific db connection
 @app.before_request
 def before_request():
@@ -114,6 +98,18 @@ def register():
 def logout():
     session.clear()
     return redirect('/login')
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    if request.method == 'POST':
+        # if not request.form.get('task'):
+        #     return apology('Please fill in all fields', 400)
+
+        # g.c.execute('INSERT INTO tasks (user_id, task) VALUES (?, ?)', (session['user_id'], request.form.get('task')))
+        # g.db.commit()
+        return redirect('/')
+    return render_template('add.html')
+
 
 # Close the database connection when the application is terminated
 conn.commit()
