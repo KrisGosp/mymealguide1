@@ -51,11 +51,21 @@ def login():
 
     if request.method == 'POST':
         if request.form.get('username') == '' or request.form.get('password') == '':
-            return 'Please fill in all fields'
+            return apology('Please fill in all fields', 400)
         
         uname = request.form.get('username')
-        pword = generate_password_hash(request.form.get('password'))
+        rows = g.c.execute('SELECT * FROM users WHERE username = ?', (uname,)).fetchone()
         
+        if not rows:
+            return apology('Invalid username and/or password', 400)
+        elif not check_password_hash(rows[2], request.form.get('password')):
+            return apology('Invalid username and/or password', 400)
+
+        # Remember user that has logged in
+        session['user_id'] = rows[0]
+        session['username'] = rows[1]
+
+        return redirect('/')
         
     return render_template('login.html')
 
@@ -72,8 +82,11 @@ def register():
 
         uname = request.form.get('username')
         pword = generate_password_hash(request.form.get('password'))
-        print(uname, pword)
+
         # Check if the username is already taken
+        g.c.execute('SELECT * FROM users WHERE username = ?', (uname,))
+        if g.c.fetchone() is not None:
+            return apology('Username already taken', 400)
 
         # Insert the user into the database
         g.c.execute('INSERT INTO users (username, hash) VALUES (?, ?)', (uname, pword))
