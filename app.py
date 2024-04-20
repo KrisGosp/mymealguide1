@@ -94,6 +94,10 @@ def register():
         return redirect('/login')
     return render_template('register.html')
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
 
 # Close the database connection when the application is terminated
 conn.commit()
