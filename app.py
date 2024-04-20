@@ -1,8 +1,8 @@
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, g
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
-from helpers import login_required
+from helpers import login_required, apology
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -15,6 +15,18 @@ Session(app)
 # Connect to the database
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
+
+# Implement thread-specific db connection
+@app.before_request
+def before_request():
+    g.db = sqlite3.connect('database.db')
+    g.c = g.db.cursor()
+
+@app.teardown_request
+def teardown_request(exception):
+    db = getattr(g, 'db', None)
+    if db is not None:
+        db.close()
 
 # Ensure responses aren't cached
 @app.after_request
@@ -33,24 +45,43 @@ def home():
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        return 'POST'
-    return render_template('login.html')
+        
+    # Forget any user_id
+    session.clear()
 
-# Register route
-@app.route('/register', methods=['GET', 'POST'])
-def register():
     if request.method == 'POST':
         if request.form.get('username') == '' or request.form.get('password') == '':
             return 'Please fill in all fields'
         
         uname = request.form.get('username')
         pword = generate_password_hash(request.form.get('password'))
+        
+        
+    return render_template('login.html')
+
+# Register route
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+
+    # Forget any user_id
+    session.clear()
+
+    if request.method == 'POST':
+        username_exists = g.c.execute('SELECT username FROM users WHERE username = ?', (request.form.get('username'))).fetchone()
+
+        if request.form.get('username') == '' or request.form.get('password') == '':
+            return apology('Please fill in all fields')
+        elif username_exists:
+            return apology('Username already taken')
+
+        uname = request.form.get('username')
+        pword = generate_password_hash(request.form.get('password'))
 
         # Check if the username is already taken
 
         # Insert the user into the database
-        c.execute('INSERT INTO users (username, hash) VALUES (?, ?)', (uname, pword))
+        g.c.execute('INSERT INTO users (username, hash) VALUES (?, ?)', (uname, pword))
+        g.db.commit()
         return redirect('/login')
     return render_template('register.html')
 
