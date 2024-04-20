@@ -1,5 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, request, session
+from flask_session import Session
 import sqlite3
+from helpers import login_required
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -8,27 +10,27 @@ app = Flask(__name__)
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
-c.execute(""" 
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        hash TEXT NOT NULL
-    )""")
-c.execute("PRAGMA foreign_keys = ON")
+# c.execute(""" 
+#     CREATE TABLE IF NOT EXISTS users (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         username TEXT NOT NULL,
+#         hash TEXT NOT NULL
+#     )""")
+# c.execute("PRAGMA foreign_keys = ON")
 
-c.execute(""" 
-    CREATE TABLE IF NOT EXISTS recipes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        name TEXT NOT NULL,
-        description TEXT,
-        total_time INTEGER,
-        category TEXT,
-        instructions TEXT,
-        difficulty INTEGER,
-        rating INTEGER,
-        FOREIGN KEY(user_id) REFERENCES users(id)
-    )""")
+# c.execute(""" 
+#     CREATE TABLE IF NOT EXISTS recipes (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         user_id INTEGER,
+#         name TEXT NOT NULL,
+#         description TEXT,
+#         total_time INTEGER,
+#         category TEXT,
+#         instructions TEXT,
+#         difficulty INTEGER,
+#         rating INTEGER,
+#         FOREIGN KEY(user_id) REFERENCES users(id)
+#     )""")
 # c.execute("""
 #     INSERT INTO recipes (name, description, total_time, category, instructions, difficulty, rating)
 #     VALUES (?, ?, ?, ?, ?, ?, ?)
