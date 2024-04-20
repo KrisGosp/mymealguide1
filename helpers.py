@@ -14,9 +14,6 @@ def apology(message, code=400):
 
     # Escape special characters
     def escape(s):
-        """
-        https://github.com/jacebrowning/memegen#special-characters
-        """
         for old, new in [
             ("-", "--"),
             (" ", "-"),

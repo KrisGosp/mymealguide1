@@ -67,16 +67,12 @@ def register():
     session.clear()
 
     if request.method == 'POST':
-        username_exists = g.c.execute('SELECT username FROM users WHERE username = ?', (request.form.get('username'))).fetchone()
-
-        if request.form.get('username') == '' or request.form.get('password') == '':
-            return apology('Please fill in all fields')
-        elif username_exists:
-            return apology('Username already taken')
+        if not request.form.get('username') or not request.form.get('password'):
+            return apology('Please fill in all fields', 400)
 
         uname = request.form.get('username')
         pword = generate_password_hash(request.form.get('password'))
-
+        print(uname, pword)
         # Check if the username is already taken
 
         # Insert the user into the database
