@@ -58,7 +58,8 @@ def after_request(response):
 @app.route('/')
 @login_required
 def home():
-    return render_template('index.html')
+    rows = g.c.execute('SELECT name, category, difficulty, rating, price  FROM recipes WHERE user_id = ?', (session['user_id'],)).fetchall()
+    return render_template('index.html', rows=rows)
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])

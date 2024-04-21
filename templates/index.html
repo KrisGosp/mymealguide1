@@ -1,2 +1,26 @@
 {% extends "layout.html" %} {% block title %} Log In {% endblock %} {% block
-main %} Hello, {{ session["username"] }} {% endblock %}
+main %}
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Difficulty</th>
+      <th>Rating</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows: %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+      <td>{{ row[3] }}</td>
+      <td>{{ row[4] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
