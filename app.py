@@ -130,6 +130,8 @@ def add():
         rating = request.form.get('option')
         last_cooked = date.today().isoformat()
         print(name, desc, instructions, difficulty, category, price, total_time, last_cooked, rating)
+        g.c.execute('INSERT INTO recipes (user_id, name, description, total_time, category, instructions, difficulty, rating, price, last_cooked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (session['user_id'], name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked))
+        g.db.commit()
         return redirect('/')
     return render_template('add.html')
 
