@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, session, g
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import date
 import sqlite3
 from helpers import login_required, apology
 
@@ -15,6 +16,23 @@ Session(app)
 # Connect to the database
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
+
+# Hopefully last alter of the table
+# c.execute("""
+# CREATE TABLE recipes (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         user_id INTEGER,
+#         name TEXT NOT NULL,
+#         description TEXT,
+#         total_time INTEGER,
+#         category TEXT,
+#         instructions TEXT,
+#         difficulty INTEGER,
+#         rating INTEGER,
+#         price TEXT,
+#         last_cooked DATE,
+#         FOREIGN KEY(user_id) REFERENCES users(id)
+#     );""")
 
 # Implement thread-specific db connection
 @app.before_request
@@ -102,11 +120,16 @@ def logout():
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
-        # if not request.form.get('task'):
-        #     return apology('Please fill in all fields', 400)
-
-        # g.c.execute('INSERT INTO tasks (user_id, task) VALUES (?, ?)', (session['user_id'], request.form.get('task')))
-        # g.db.commit()
+        name = request.form.get('name')
+        desc = request.form.get('desc')
+        instructions = request.form.get('instructions')
+        difficulty = request.form.get('difficulty')
+        category = request.form.get('category')
+        price = request.form.get('price')
+        total_time = request.form.get('total_time')
+        rating = request.form.get('option')
+        last_cooked = date.today().isoformat()
+        print(name, desc, instructions, difficulty, category, price, total_time, last_cooked, rating)
         return redirect('/')
     return render_template('add.html')
 

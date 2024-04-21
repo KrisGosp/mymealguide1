@@ -30,7 +30,11 @@ main %}
   </div>
 
   <div class="mb-3">
-    <select class="form-select" aria-label="Default select example">
+    <select
+      name="difficulty"
+      class="form-select"
+      aria-label="Default select example"
+    >
       <option selected>Difficulty:</option>
       <option value="1">Difficulty: One</option>
       <option value="2">Difficulty: Two</option>
@@ -38,13 +42,21 @@ main %}
     </select>
   </div>
   <div class="mb-3">
-    <select class="form-select" aria-label="Default select example">
+    <select
+      name="category"
+      class="form-select"
+      aria-label="Default select example"
+    >
       <option selected>Category:</option>
       <option value="food">Food</option>
     </select>
   </div>
   <div class="mb-3">
-    <select class="form-select" aria-label="Default select example">
+    <select
+      name="price"
+      class="form-select"
+      aria-label="Default select example"
+    >
       <option selected>Price:</option>
       <option value="$">Price: $</option>
       <option value="$$">Price: $$</option>
@@ -119,9 +131,9 @@ main %}
     <input
       class="form-control mx-auto w-auto"
       name="last_cooked"
-      placeholder="Last cooked"
+      placeholder="Last cooked: Today"
       type="text"
-    />
+    />Today
   </div>
   <button class="btn btn-primary" type="submit">Add</button>
 </form>
