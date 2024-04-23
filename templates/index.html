@@ -1,23 +1,25 @@
 {% extends "layout.html" %} {% block title %} Log In {% endblock %} {% block
 main %}
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Category</th>
-      <th>Difficulty</th>
-      <th>Rating</th>
-      <th>Price</th>
+      <th scope="col">Name</th>
+      <th scope="col">Category</th>
+      <th scope="col">Difficulty</th>
+      <th scope="col">
+        Rating <a href="{{ url_for('sort', column='rating')}}">|</a>
+      </th>
+      <th scope="col">Price</th>
     </tr>
   </thead>
   <tbody>
     {% for row in rows: %}
     <tr>
-      <td>{{ row[0] }}</td>
-      <td>{{ row[1] }}</td>
+      <td><a href="/recipe/{{ row[0] }}">{{ row[1] }}</a></td>
       <td>{{ row[2] }}</td>
       <td>{{ row[3] }}</td>
       <td>{{ row[4] }}</td>
+      <td>{{ row[5] }}</td>
     </tr>
     {% endfor %}
   </tbody>

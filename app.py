@@ -58,7 +58,7 @@ def after_request(response):
 @app.route('/')
 @login_required
 def home():
-    rows = g.c.execute('SELECT name, category, difficulty, rating, price  FROM recipes WHERE user_id = ?', (session['user_id'],)).fetchall()
+    rows = g.c.execute('SELECT id, name, category, difficulty, rating, price  FROM recipes WHERE user_id = ?', (session['user_id'],)).fetchall()
     return render_template('index.html', rows=rows)
 
 # Login route
@@ -118,6 +118,12 @@ def logout():
     session.clear()
     return redirect('/login')
 
+@app.route('/sort')
+def sort():
+    column = request.args.get('column', default='name')
+    rows = g.c.execute('SELECT name, category, difficulty, rating, price FROM recipes WHERE user_id = ? ORDER BY rating', (session['user_id'],)).fetchall()
+    print(rows)
+    return render_template('index.html', rows=rows)
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
