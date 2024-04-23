@@ -17,23 +17,7 @@ Session(app)
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
-# Hopefully last alter of the table
-# c.execute("""
-# CREATE TABLE recipes (
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         user_id INTEGER,
-#         name TEXT NOT NULL,
-#         description TEXT,
-#         total_time INTEGER,
-#         category TEXT,
-#         instructions TEXT,
-#         difficulty INTEGER,
-#         rating INTEGER,
-#         price TEXT,
-#         last_cooked DATE,
-#         FOREIGN KEY(user_id) REFERENCES users(id)
-#     );""")
-
+COLUMNS = ['Name', 'Category', 'Difficulty', 'Rating', 'Price']
 # Implement thread-specific db connection
 @app.before_request
 def before_request():
@@ -59,7 +43,7 @@ def after_request(response):
 @login_required
 def home():
     rows = g.c.execute('SELECT id, name, category, difficulty, rating, price  FROM recipes WHERE user_id = ?', (session['user_id'],)).fetchall()
-    return render_template('index.html', rows=rows)
+    return render_template('index.html', rows=rows, columns=COLUMNS)
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
@@ -120,14 +104,14 @@ def logout():
 
 @app.route('/sort')
 def sort():
-    column = request.args.get('column', default='name')
+    column = request.args.get('column', default='name').lower()
     way = request.args.get('way', default='ASC')
     if way == 'ASC':
         rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price FROM recipes WHERE user_id = ? ORDER BY {column}', (session['user_id'],)).fetchall()
     elif way == 'DESC':
         rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price FROM recipes WHERE user_id = ? ORDER BY {column} DESC', (session['user_id'],)).fetchall()
 
-    return render_template('index.html', rows=rows)
+    return render_template('index.html', rows=rows, columns=COLUMNS)
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':

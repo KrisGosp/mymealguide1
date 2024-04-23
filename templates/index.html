@@ -3,14 +3,12 @@ main %}
 <table class="table table-striped">
   <thead>
     <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Category</th>
-      <th scope="col">Difficulty</th>
+      {% for c in columns %}
       <th scope="col">
-        Rating <a href="{{ url_for('sort', column='rating', way='ASC')}}">↓</a>
-        <a href="{{ url_for('sort', column='rating', way='DESC')}}">↑</a>
+        {{ c }} <a href="{{ url_for('sort', column=c, way='ASC')}}">↓</a>
+        <a href="{{ url_for('sort', column=c, way='DESC')}}">↑</a>
       </th>
-      <th scope="col">Price</th>
+      {% endfor %}
     </tr>
   </thead>
   <tbody>
