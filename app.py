@@ -121,8 +121,12 @@ def logout():
 @app.route('/sort')
 def sort():
     column = request.args.get('column', default='name')
-    rows = g.c.execute('SELECT name, category, difficulty, rating, price FROM recipes WHERE user_id = ? ORDER BY rating', (session['user_id'],)).fetchall()
-    print(rows)
+    way = request.args.get('way', default='ASC')
+    if way == 'ASC':
+        rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price FROM recipes WHERE user_id = ? ORDER BY {column}', (session['user_id'],)).fetchall()
+    elif way == 'DESC':
+        rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price FROM recipes WHERE user_id = ? ORDER BY {column} DESC', (session['user_id'],)).fetchall()
+
     return render_template('index.html', rows=rows)
 @app.route('/add', methods=['GET', 'POST'])
 def add():

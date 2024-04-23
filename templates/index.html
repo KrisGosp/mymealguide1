@@ -7,7 +7,8 @@ main %}
       <th scope="col">Category</th>
       <th scope="col">Difficulty</th>
       <th scope="col">
-        Rating <a href="{{ url_for('sort', column='rating')}}">|</a>
+        Rating <a href="{{ url_for('sort', column='rating', way='ASC')}}">↓</a>
+        <a href="{{ url_for('sort', column='rating', way='DESC')}}">↑</a>
       </th>
       <th scope="col">Price</th>
     </tr>
