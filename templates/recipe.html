@@ -15,4 +15,10 @@ endblock %} {% block main %}
   <h3>{{ row[9] }}</h3>
   <p>{{ row[10] }}</p>
 </div>
+<div class="actions">
+  <a href="{{ url_for('update', id=row[0]) }}" class="btn btn-primary"
+    >Update</a
+  >
+  <a href="{{ url_for('delete', id=row[0]) }}" class="btn btn-danger">Delete</a>
+</div>
 {% endblock %}

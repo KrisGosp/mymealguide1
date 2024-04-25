@@ -51,7 +51,7 @@ def home():
         rows = g.c.execute('SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ?', (session['user_id'],)).fetchall()
         return render_template('index.html', rows=rows, columns=COLUMNS, categories=CATEGORIES)
 
-# Login route
+# Authentication routes
 @app.route('/login', methods=['GET', 'POST'])
 def login():
         
@@ -78,7 +78,6 @@ def login():
         
     return render_template('login.html')
 
-# Register route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 
@@ -108,6 +107,7 @@ def logout():
     session.clear()
     return redirect('/login')
 
+# Sorting route
 @app.route('/sort')
 def sort():
     column = request.args.get('column', default='name').lower()
@@ -124,6 +124,8 @@ def sort():
         rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY {column} DESC', (session['user_id'],)).fetchall()
 
     return render_template('index.html', rows=rows, columns=COLUMNS)
+
+# Adding route
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
@@ -142,10 +144,34 @@ def add():
         return redirect('/')
     return render_template('add.html', categories=CATEGORIES)
 
+# Dynamic routes
 @app.route('/recipe/<int:id>')
 def recipe(id):
     row = g.c.execute('SELECT * FROM recipes WHERE id = ?', (id,)).fetchone()
     return render_template('recipe.html', row=row)
+
+@app.route('/update/<int:id>', methods=['GET', 'POST'])
+def update(id):
+    recipe = g.c.execute('SELECT * FROM recipes WHERE id = ?', (id,)).fetchone()
+    if recipe is None:
+        return apology('Recipe not found', 404)
+    
+    if request.method == 'POST':
+        name = request.form.get('name')
+        desc = request.form.get('desc')
+        instructions = request.form.get('instructions')
+        difficulty = request.form.get('difficulty')
+        category = request.form.get('category')
+        price = request.form.get('price')
+        total_time = request.form.get('total_time')
+        rating = request.form.get('option')
+        last_cooked = date.today().isoformat()
+
+        g.c.execute('UPDATE recipes SET name = ?, description = ?, total_time = ?, category = ?, instructions = ?, difficulty = ?, rating = ?, price = ?, last_cooked = ? WHERE id = ?', (name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked, id))
+        g.db.commit()
+        return redirect('/recipe/' + id)
+    
+    return render_template('update.html', recipe=recipe, categories=CATEGORIES)
 # Close the database connection when the application is terminated
 conn.commit()
 conn.close()
