@@ -172,6 +172,12 @@ def update(id):
         return redirect('/recipe/' + id)
     
     return render_template('update.html', recipe=recipe, categories=CATEGORIES)
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    g.c.execute('DELETE FROM recipes WHERE id = ?', (id,))
+    g.db.commit()
+    return redirect('/')
 # Close the database connection when the application is terminated
 conn.commit()
 conn.close()

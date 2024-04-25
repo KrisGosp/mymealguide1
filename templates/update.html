@@ -6,9 +6,9 @@
       class="form-control"
       autofocus
       name="name"
-      placeholder="Name"
+      placeholder="{{ recipe[2]}}"
       type="text"
-    />{{ recipe[2]}}
+    />
   </div>
   <div class="mb-3">
     <textarea
@@ -73,9 +73,9 @@
     <input
       class="form-control mx-auto w-auto"
       name="total_time"
-      placeholder="Total cook time (in minutes)"
+      placeholder="{{ recipe[4]}}"
       type="number"
-    />{{ recipe[4]}}
+    />
   </div>
   <div class="mb-3">
     <h2 class="fs-4">Rating: {{ recipe[8]}} Stars</h2>
@@ -137,9 +137,9 @@
     <input
       class="form-control mx-auto w-auto"
       name="last_cooked"
-      placeholder="Last cooked: Today"
+      placeholder="{{ recipe[10]}}"
       type="text"
-    />{{ recipe[10]}}
+    />
   </div>
   <button class="btn btn-primary" type="submit">Add</button>
 </form>
