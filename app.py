@@ -18,7 +18,7 @@ conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
 CATEGORIES = ['Breakfast', 'Main', 'Dessert', 'Side', 'Snack']
-COLUMNS = ['Name', 'Difficulty', 'Rating', 'Price']
+COLUMNS = ['name', 'difficulty', 'rating', 'price', 'cooked']
 # Implement thread-specific db connection
 @app.before_request
 def before_request():
@@ -46,9 +46,10 @@ def home():
     category = request.args.get('category')
     if category:
         rows = g.c.execute('SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? AND category = ?', (session['user_id'], category)).fetchall()
+        return render_template('index.html', rows=rows, columns=COLUMNS, categories=CATEGORIES, category=category.capitalize())  
     else:
         rows = g.c.execute('SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ?', (session['user_id'],)).fetchall()
-    return render_template('index.html', rows=rows, columns=COLUMNS, categories=CATEGORIES)
+        return render_template('index.html', rows=rows, columns=COLUMNS, categories=CATEGORIES)
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
@@ -111,10 +112,16 @@ def logout():
 def sort():
     column = request.args.get('column', default='name').lower()
     way = request.args.get('way', default='ASC')
+    if column == 'cooked':
+        if way == 'ASC':
+            rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY last_cooked', (session['user_id'],)).fetchall()
+        elif way == 'DESC':
+            rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY last_cooked DESC', (session['user_id'],)).fetchall()
+        return render_template('index.html', rows=rows, columns=COLUMNS)
     if way == 'ASC':
-        rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price FROM recipes WHERE user_id = ? ORDER BY {column}', (session['user_id'],)).fetchall()
+        rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY {column}', (session['user_id'],)).fetchall()
     elif way == 'DESC':
-        rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price FROM recipes WHERE user_id = ? ORDER BY {column} DESC', (session['user_id'],)).fetchall()
+        rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY {column} DESC', (session['user_id'],)).fetchall()
 
     return render_template('index.html', rows=rows, columns=COLUMNS)
 @app.route('/add', methods=['GET', 'POST'])

@@ -7,7 +7,11 @@ main %}
       class="form-select"
       aria-label="Default select example"
     >
+      {% if category %}
+      <option selected disabled>Category: {{ category }}</option>
+      {% else %}
       <option selected disabled>Category:</option>
+      {% endif %}
       <option value="">Any</option>
       {% for cat in categories %}
       <option value="{{ cat.lower() }}">{{ cat }}</option>
@@ -21,7 +25,8 @@ main %}
     <tr>
       {% for c in columns %}
       <th scope="col">
-        {{ c }} <a href="{{ url_for('sort', column=c, way='ASC')}}">↓</a>
+        {{ c.capitalize() }}
+        <a href="{{ url_for('sort', column=c, way='ASC')}}">↓</a>
         <a href="{{ url_for('sort', column=c, way='DESC')}}">↑</a>
       </th>
       {% endfor %}
@@ -36,6 +41,7 @@ main %}
       <td>{{ row[3] }}</td>
       <td>{{ row[4] }}</td>
       <td>{{ row[5] }}</td>
+      <td>{{ row[6] }}</td>
     </tr>
     {% endfor %}
   </tbody>
