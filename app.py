@@ -112,6 +112,10 @@ def logout():
 def sort():
     column = request.args.get('column', default='name').lower()
     way = request.args.get('way', default='ASC')
+    category = request.args.get('category', default='').capitalize()
+    if category:
+        filtered = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? AND category = ?', (session['user_id'], category)).fetchall()
+        return render_template('index.html', rows=filtered, columns=COLUMNS, categories=CATEGORIES, category=category) 
     if column == 'cooked':
         if way == 'ASC':
             rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY last_cooked', (session['user_id'],)).fetchall()
@@ -123,7 +127,7 @@ def sort():
     elif way == 'DESC':
         rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY {column} DESC', (session['user_id'],)).fetchall()
 
-    return render_template('index.html', rows=rows, columns=COLUMNS)
+    return render_template('index.html', rows=rows, columns=COLUMNS, categories=CATEGORIES)
 
 # Adding route
 @app.route('/add', methods=['GET', 'POST'])
@@ -137,6 +141,18 @@ def add():
         price = request.form.get('price')
         total_time = request.form.get('total_time')
         rating = request.form.get('option')
+        if not name or not desc or not instructions or not difficulty or not category or not price or not rating:
+            return apology('Please fill in all fields', 400)
+        if not total_time or not total_time.isnumeric():
+            total_time = 0
+        if int(difficulty) not in [1, 2, 3]:
+            return apology('Invalid difficulty', 400)
+        if price not in ['$', '$$', '$$$']:
+            return apology('Invalid price', 400)
+        if int(rating) not in [1, 2, 3, 4, 5]:
+            return apology('Invalid rating', 400)
+        if category not in CATEGORIES:
+            return apology('Invalid category', 400)
         last_cooked = date.today().isoformat()
         print(name, desc, instructions, difficulty, category, price, total_time, last_cooked, rating)
         g.c.execute('INSERT INTO recipes (user_id, name, description, total_time, category, instructions, difficulty, rating, price, last_cooked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (session['user_id'], name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked))
