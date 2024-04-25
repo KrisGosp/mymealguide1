@@ -194,6 +194,15 @@ def delete(id):
     g.c.execute('DELETE FROM recipes WHERE id = ?', (id,))
     g.db.commit()
     return redirect('/')
+
+@app.route('/cooking_now/<int:id>')
+def cooking_now(id):
+    cooking = request.args.get('cooking')
+    if cooking == 'yes':
+        g.c.execute('UPDATE recipes SET last_cooked = ? WHERE id = ?', (date.today().isoformat(), id))
+    
+    g.db.commit()
+    return redirect('/recipe/' + str(id))
 # Close the database connection when the application is terminated
 conn.commit()
 conn.close()

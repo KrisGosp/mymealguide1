@@ -21,4 +21,32 @@ endblock %} {% block main %}
   >
   <a href="{{ url_for('delete', id=row[0]) }}" class="btn btn-danger">Delete</a>
 </div>
+<div>
+  <h3>Cooking now?</h3>
+  <form action="/cooking_now/{{row[0]}}" method="get">
+    <div class="btn-group" role="group">
+      <input
+        type="radio"
+        class="btn-check"
+        name="cooking"
+        id="no"
+        autocomplete="off"
+        value="no"
+        checked
+      />
+      <label class="btn btn-outline-primary" for="no">No</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        name="cooking"
+        id="yes"
+        autocomplete="off"
+        value="yes"
+      />
+      <label class="btn btn-outline-primary" for="yes">Yes</label>
+      <button type="submit">Confirm</button>
+    </div>
+  </form>
+</div>
 {% endblock %}
