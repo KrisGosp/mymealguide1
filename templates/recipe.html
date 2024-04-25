@@ -1,0 +1,18 @@
+{% extends "layout.html" %} {% block title %} Recipe Details: {{ row[2] }} {%
+endblock %} {% block main %}
+<div class="header">
+  <h1>{{ row[2] }}</h1>
+  <p>{{ row[3] }}</p>
+</div>
+<div class="intruction">
+  <h2>Instructions</h2>
+  <p>{{ row[6] }}</p>
+  <h3>Total cook time: {{ row[5] }} minutes</h3>
+</div>
+<div class="details">
+  <h3>{{ row[7] }}</h3>
+  <h3>{{ row[8] }}</h3>
+  <h3>{{ row[9] }}</h3>
+  <p>{{ row[10] }}</p>
+</div>
+{% endblock %}

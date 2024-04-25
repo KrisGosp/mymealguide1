@@ -130,7 +130,10 @@ def add():
         return redirect('/')
     return render_template('add.html')
 
-
+@app.route('/recipe/<int:id>')
+def recipe(id):
+    row = g.c.execute('SELECT * FROM recipes WHERE id = ?', (id,)).fetchone()
+    return render_template('recipe.html', row=row)
 # Close the database connection when the application is terminated
 conn.commit()
 conn.close()
