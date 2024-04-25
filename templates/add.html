@@ -35,7 +35,7 @@
       class="form-select"
       aria-label="Default select example"
     >
-      <option selected>Difficulty:</option>
+      <option selected disabled>Difficulty:</option>
       <option value="1">Difficulty: One</option>
       <option value="2">Difficulty: Two</option>
       <option value="3">Difficulty: Three</option>
@@ -47,8 +47,10 @@
       class="form-select"
       aria-label="Default select example"
     >
-      <option selected>Category:</option>
-      <option value="food">Food</option>
+      <option selected disabled>Category:</option>
+      {% for cat in categories %}
+      <option value="{{cat}}">{{cat}}</option>
+      {% endfor %}
     </select>
   </div>
   <div class="mb-3">
@@ -57,7 +59,7 @@
       class="form-select"
       aria-label="Default select example"
     >
-      <option selected>Price:</option>
+      <option selected disabled>Price:</option>
       <option value="$">Price: $</option>
       <option value="$$">Price: $$</option>
       <option value="$$$">Price: $$$</option>

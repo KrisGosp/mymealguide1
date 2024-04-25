@@ -1,5 +1,32 @@
 {% extends "layout.html" %} {% block title %} Homepage {% endblock %} {% block
 main %}
+<div class="mb-3">
+  <form action="/" method="GET">
+    <select
+      name="category"
+      class="form-select"
+      aria-label="Default select example"
+    >
+      <option selected disabled>Category:</option>
+      <option value="">Any</option>
+      {% for cat in categories %}
+      <option value="{{ cat.lower() }}">{{ cat }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+  </form>
+  <!-- <select
+    name="category"
+    class="form-select"
+    aria-label="Default select example"
+  >
+    <option selected disabled>Category:</option>
+    <option value="">Any</option>
+    {% for cat in categories %}
+    <option value="{{cat}}">{{cat}}</option>
+    {% endfor %}
+  </select> -->
+</div>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -14,8 +41,9 @@ main %}
   <tbody>
     {% for row in rows: %}
     <tr>
-      <td><a href="/recipe/{{ row[0] }}">{{ row[1] }}</a></td>
-      <td>{{ row[2] }}</td>
+      <td class="text-start">
+        <a href="/recipe/{{ row[0] }}">{{ row[1] }}</a>
+      </td>
       <td>{{ row[3] }}</td>
       <td>{{ row[4] }}</td>
       <td>{{ row[5] }}</td>

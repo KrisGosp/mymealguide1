@@ -17,7 +17,8 @@ Session(app)
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
-COLUMNS = ['Name', 'Category', 'Difficulty', 'Rating', 'Price']
+CATEGORIES = ['Breakfast', 'Main', 'Dessert', 'Side', 'Snack']
+COLUMNS = ['Name', 'Difficulty', 'Rating', 'Price']
 # Implement thread-specific db connection
 @app.before_request
 def before_request():
@@ -42,8 +43,12 @@ def after_request(response):
 @app.route('/')
 @login_required
 def home():
-    rows = g.c.execute('SELECT id, name, category, difficulty, rating, price  FROM recipes WHERE user_id = ?', (session['user_id'],)).fetchall()
-    return render_template('index.html', rows=rows, columns=COLUMNS)
+    category = request.args.get('category')
+    if category:
+        rows = g.c.execute('SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? AND category = ?', (session['user_id'], category)).fetchall()
+    else:
+        rows = g.c.execute('SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ?', (session['user_id'],)).fetchall()
+    return render_template('index.html', rows=rows, columns=COLUMNS, categories=CATEGORIES)
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
@@ -128,7 +133,7 @@ def add():
         g.c.execute('INSERT INTO recipes (user_id, name, description, total_time, category, instructions, difficulty, rating, price, last_cooked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (session['user_id'], name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked))
         g.db.commit()
         return redirect('/')
-    return render_template('add.html')
+    return render_template('add.html', categories=CATEGORIES)
 
 @app.route('/recipe/<int:id>')
 def recipe(id):
