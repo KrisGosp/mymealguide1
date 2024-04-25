@@ -1,7 +1,7 @@
 {% extends "layout.html" %} {% block title %} Homepage {% endblock %} {% block
 main %}
 <div class="mb-3">
-  <form action="/" method="GET">
+  <form action="/" method="GET" class="d-flex">
     <select
       name="category"
       class="form-select"
@@ -13,19 +13,8 @@ main %}
       <option value="{{ cat.lower() }}">{{ cat }}</option>
       {% endfor %}
     </select>
-    <button type="submit">Filter</button>
+    <button class="btn btn-light d-block px-5" type="submit">Filter</button>
   </form>
-  <!-- <select
-    name="category"
-    class="form-select"
-    aria-label="Default select example"
-  >
-    <option selected disabled>Category:</option>
-    <option value="">Any</option>
-    {% for cat in categories %}
-    <option value="{{cat}}">{{cat}}</option>
-    {% endfor %}
-  </select> -->
 </div>
 <table class="table table-striped">
   <thead>
