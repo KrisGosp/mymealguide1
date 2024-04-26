@@ -130,12 +130,28 @@
     </div>
   </div>
   <div class="mb-3">
-    <input
-      class="form-control mx-auto w-auto"
-      name="last_cooked"
-      placeholder="Last cooked: Today"
-      type="text"
-    />Today
+    <h3 class="cooking_header">Are you going to cook this now?</h3>
+    <div class="btn-group" role="group">
+      <input
+        type="radio"
+        class="btn-check"
+        name="cooking"
+        id="no"
+        autocomplete="off"
+        value="no"
+        checked
+      />
+      <label class="btn btn-outline-primary" for="no">No</label>
+      <input
+        type="radio"
+        class="btn-check"
+        name="cooking"
+        id="yes"
+        autocomplete="off"
+        value="yes"
+      />
+      <label class="btn btn-outline-primary" for="yes">Yes</label>
+    </div>
   </div>
   <button class="btn btn-primary" type="submit">Add</button>
 </form>

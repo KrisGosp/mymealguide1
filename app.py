@@ -148,6 +148,7 @@ def add():
         price = request.form.get('price')
         total_time = request.form.get('total_time')
         rating = request.form.get('option')
+        last_cooked = request.form.get('cooking')
         if not name or not desc or not instructions or not difficulty or not category or not price or not rating:
             return apology('Please fill in all fields', 400)
         if not total_time or not total_time.isnumeric():
@@ -160,7 +161,10 @@ def add():
             return apology('Invalid rating', 400)
         if category not in CATEGORIES:
             return apology('Invalid category', 400)
-        last_cooked = date.today().isoformat()
+        if last_cooked == 'yes':
+            last_cooked = date.today().isoformat()
+        elif last_cooked == 'no':
+            last_cooked = ''
         print(name, desc, instructions, difficulty, category, price, total_time, last_cooked, rating)
         g.c.execute('INSERT INTO recipes (user_id, name, description, total_time, category, instructions, difficulty, rating, price, last_cooked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (session['user_id'], name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked))
         g.db.commit()
@@ -170,9 +174,6 @@ def add():
 @app.route('/browse')
 def browse():
     rows = g.c.execute('SELECT id, name, category, difficulty, rating, price FROM recipes').fetchall()
-    print('AAAAAAAAAAAAAAAA')
-    print(rows)
-    # 
     return render_template('browse.html', rows=rows, columns=BCOLUMNS)
 # Dynamic routes
 @app.route('/recipe/<int:id>')
