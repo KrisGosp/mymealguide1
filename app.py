@@ -19,6 +19,7 @@ c = conn.cursor()
 
 CATEGORIES = ['Breakfast', 'Main', 'Dessert', 'Side', 'Snack']
 COLUMNS = ['name', 'difficulty', 'rating', 'price', 'cooked']
+BCOLUMNS = ['name', 'category', 'difficulty', 'rating', 'price']
 # Implement thread-specific db connection
 @app.before_request
 def before_request():
@@ -113,15 +114,21 @@ def sort():
     column = request.args.get('column', default='name').lower()
     way = request.args.get('way', default='ASC')
     category = request.args.get('category', default='').capitalize()
+
+    # Handle category sorting
     if category:
         filtered = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? AND category = ?', (session['user_id'], category)).fetchall()
         return render_template('index.html', rows=filtered, columns=COLUMNS, categories=CATEGORIES, category=category) 
+    
+    # Handle cooked sorting
     if column == 'cooked':
         if way == 'ASC':
             rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY last_cooked', (session['user_id'],)).fetchall()
         elif way == 'DESC':
             rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY last_cooked DESC', (session['user_id'],)).fetchall()
-        return render_template('index.html', rows=rows, columns=COLUMNS)
+        return render_template('index.html', rows=rows, columns=COLUMNS, categories=CATEGORIES, category=category)
+    
+    # Handle all other sorting
     if way == 'ASC':
         rows = g.c.execute(f'SELECT id, name, category, difficulty, rating, price, last_cooked FROM recipes WHERE user_id = ? ORDER BY {column}', (session['user_id'],)).fetchall()
     elif way == 'DESC':
@@ -160,6 +167,13 @@ def add():
         return redirect('/')
     return render_template('add.html', categories=CATEGORIES)
 
+@app.route('/browse')
+def browse():
+    rows = g.c.execute('SELECT id, name, category, difficulty, rating, price FROM recipes').fetchall()
+    print('AAAAAAAAAAAAAAAA')
+    print(rows)
+    # 
+    return render_template('browse.html', rows=rows, columns=BCOLUMNS)
 # Dynamic routes
 @app.route('/recipe/<int:id>')
 def recipe(id):
