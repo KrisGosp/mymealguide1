@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block title %} Add {% endblock %} {% block main
 %}
-<form action="/add" method="post">
+<form action="/update/{{recipe[0]}}" method="post">
   <div class="mb-3">
     <input
       class="form-control"

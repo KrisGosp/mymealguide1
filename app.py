@@ -199,7 +199,7 @@ def update(id):
 
         g.c.execute('UPDATE recipes SET name = ?, description = ?, total_time = ?, category = ?, instructions = ?, difficulty = ?, rating = ?, price = ?, last_cooked = ? WHERE id = ?', (name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked, id))
         g.db.commit()
-        return redirect('/recipe/' + id)
+        return redirect('/recipe/' + str(id))
     
     return render_template('update.html', recipe=recipe, categories=CATEGORIES)
 
