@@ -1,69 +1,78 @@
 {% extends "layout.html" %} {% block title %} Recipe Details: {% endblock %} {%
 block main %}
 <div class="recipe_wrap">
-  <div class="header">
-    <h1>{{ row[2] }}</h1>
-    <p>{{ row[3] }}</p>
-  </div>
-  <!-- <div class="container text-center">
-    <div class="row">
-      <div class="col">Column</div>
-      <div class="col">Column</div>
+  <div class="row header">
+    <div class="col-md-8">
+      <h1>{{ row[2] }}</h1>
+      <p>{{ row[3] }}</p>
     </div>
-  </div> -->
+    <div class="col-md-4">
+      <div class="cooking_now">
+        <h3 class="d-flex justify-content-center">Cooking this now?</h3>
+        <form
+          action="/cooking_now/{{row[0]}}"
+          method="get"
+          class="d-flex justify-content-center"
+        >
+          <div class="btn-group" role="group">
+            <input
+              type="radio"
+              class="btn-check"
+              name="cooking"
+              id="no"
+              autocomplete="off"
+              value="no"
+              checked
+            />
+            <label class="cooking_choice btn btn-outline-dark" for="no"
+              >No</label
+            >
+            <input
+              type="radio"
+              class="btn-check"
+              name="cooking"
+              id="yes"
+              autocomplete="off"
+              value="yes"
+            />
+            <label class="cooking_choice btn btn-outline-dark" for="yes"
+              >Yes</label
+            >
+          </div>
+          <button class="cooking_button btn btn-success" type="submit">
+            Confirm
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
   <div class="details rounded">
     <div class="row">
-      <div class="col">
+      <div class="col-md-6">
         <p>Category: {{ row[5] }}</p>
         <p>Difficulty: {{ row[7] }}</p>
         <p>Rating: {{ row[8] }}</p>
       </div>
-      <div class="col">
+      <div class="col-md-6">
         <p>Price: {{ row[9] }}</p>
         <p>Total cook time: {{ row[4] }} minutes</p>
         <p>Last cooked: {{ row[10] }}</p>
       </div>
     </div>
   </div>
-  <div class="intruction">
+  <div class="instruction">
     <h2>Instructions</h2>
     <p>{{ row[6] }}</p>
   </div>
-  <div class="actions">
-    <a href="{{ url_for('update', id=row[0]) }}" class="btn btn-primary"
-      >Update</a
-    >
-    <a href="{{ url_for('delete', id=row[0]) }}" class="btn btn-danger"
-      >Delete</a
-    >
-  </div>
-  <div>
-    <h3>Cooking now?</h3>
-    <form action="/cooking_now/{{row[0]}}" method="get">
-      <div class="btn-group" role="group">
-        <input
-          type="radio"
-          class="btn-check"
-          name="cooking"
-          id="no"
-          autocomplete="off"
-          value="no"
-          checked
-        />
-        <label class="btn btn-outline-primary" for="no">No</label>
-
-        <input
-          type="radio"
-          class="btn-check"
-          name="cooking"
-          id="yes"
-          autocomplete="off"
-          value="yes"
-        />
-        <label class="btn btn-outline-primary" for="yes">Yes</label>
-        <button type="submit">Confirm</button>
-      </div>
-    </form>
+  <div class="actions d-flex justify-content-center">
+    <div>
+      <a href="{{ url_for('update', id=row[0]) }}" class="btn btn-primary"
+        >Update</a
+      >
+      <a href="{{ url_for('delete', id=row[0]) }}" class="btn btn-danger"
+        >Delete</a
+      >
+    </div>
   </div>
 </div>
 {% endblock %}
