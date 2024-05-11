@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, request, session, g
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import date
+from datetime import datetime, date
 import sqlite3
 from helpers import login_required, apology
 
@@ -162,7 +162,8 @@ def add():
         if category not in CATEGORIES:
             return apology('Invalid category', 400)
         if last_cooked == 'yes':
-            last_cooked = date.today().isoformat()
+            today = datetime.now()
+            last_cooked = today.strptime('%d, %B %Y')
         elif last_cooked == 'no':
             last_cooked = ''
         print(name, desc, instructions, difficulty, category, price, total_time, last_cooked, rating)
@@ -196,7 +197,8 @@ def update(id):
         price = request.form.get('price')
         total_time = request.form.get('total_time')
         rating = request.form.get('option')
-        last_cooked = date.today().isoformat()
+        today = datetime.now()
+        last_cooked = today.strptime('%d, %B %Y')
 
         g.c.execute('UPDATE recipes SET name = ?, description = ?, total_time = ?, category = ?, instructions = ?, difficulty = ?, rating = ?, price = ?, last_cooked = ? WHERE id = ?', (name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked, id))
         g.db.commit()
