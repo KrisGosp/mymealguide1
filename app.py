@@ -20,6 +20,9 @@ c = conn.cursor()
 CATEGORIES = ['Breakfast', 'Main', 'Dessert', 'Side', 'Snack']
 COLUMNS = ['name', 'difficulty', 'rating', 'price', 'cooked']
 BCOLUMNS = ['name', 'category', 'difficulty', 'rating', 'price']
+INGREDIENTS = [[
+    'Chicken', 'Beef', 'Pork', 'Minced Meat', 'Fish', 'Other Meat',], ['Eggs', 'Rice', 'Potatoes', 'Pasta & Ramen', 'Sushi', 'Milk Products',], ['Avocado', 'Broccoli', 'Cauliflower', 'Mushrooms', 'Tomatoes', 'Other Vegetables',
+]]
 # Implement thread-specific db connection
 @app.before_request
 def before_request():
@@ -226,7 +229,7 @@ def profile(id):
     user = g.c.execute('SELECT * FROM users WHERE id = ?', (id,)).fetchone()
     if user is None:
         return apology('User not found', 404)
-    return render_template('profile.html', user=user)
+    return render_template('profile.html', user=user, ingredients=INGREDIENTS)
 # Close the database connection when the application is terminated
 conn.commit()
 conn.close()

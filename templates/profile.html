@@ -1,4 +1,64 @@
 {% extends "layout.html" %} {% block title %} Log In {% endblock %} {% block
 main %}
 <h3>Hello, {{ user[1].capitalize() }}</h3>
+<div>
+  <form action="/profile/{{ user[0] }}" method="post">
+    <label class="form-label" for="category">Add a custom category:</label>
+    <input type="text" id="category" />
+    <button class="btn btn-primary" type="submit">Submit</button>
+  </form>
+</div>
+<div class="container">
+  <h3 class="m-4">Change preffered ingredients:</h3>
+  <div class="row text-start">
+    <div class="col">
+      {% for i in ingredients[0] %}
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value=""
+          id="flexCheckDefault1"
+        />
+        <label class="form-check-label" for="flexCheckDefault1">
+          {{ i }}
+        </label>
+      </div>
+      {% endfor %}
+      <!-- Repeat the form-check elements for other buttons -->
+    </div>
+    <div class="col">
+      {% for i in ingredients[1] %}
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value=""
+          id="flexCheckDefault1"
+        />
+        <label class="form-check-label" for="flexCheckDefault1">
+          {{ i }}
+        </label>
+      </div>
+      {% endfor %}
+      <!-- Repeat the form-check elements for other buttons -->
+    </div>
+    <div class="col">
+      {% for i in ingredients[2] %}
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value=""
+          id="flexCheckDefault1"
+        />
+        <label class="form-check-label" for="flexCheckDefault1">
+          {{ i }}
+        </label>
+      </div>
+      {% endfor %}
+      <!-- Repeat the form-check elements for other buttons -->
+    </div>
+  </div>
+</div>
 {% endblock %}
