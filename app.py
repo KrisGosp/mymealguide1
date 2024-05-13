@@ -220,6 +220,13 @@ def cooking_now(id):
     
     g.db.commit()
     return redirect('/recipe/' + str(id))
+
+@app.route('/profile/<int:id>')
+def profile(id):
+    user = g.c.execute('SELECT * FROM users WHERE id = ?', (id,)).fetchone()
+    if user is None:
+        return apology('User not found', 404)
+    return render_template('profile.html', user=user)
 # Close the database connection when the application is terminated
 conn.commit()
 conn.close()

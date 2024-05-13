@@ -26,8 +26,8 @@ main %}
       {% for c in columns %}
       <th scope="col">
         {{ c.capitalize() }}
-        <a href="{{ url_for('sort', column=c, way='ASC')}}">↓</a>
-        <a href="{{ url_for('sort', column=c, way='DESC')}}">↑</a>
+        <a href="{{ url_for('sort', column=c, way='DESC')}}">↓</a>
+        <a href="{{ url_for('sort', column=c, way='ASC')}}">↑</a>
       </th>
       {% endfor %}
     </tr>
@@ -41,7 +41,7 @@ main %}
       <td>{{ row[3] }}</td>
       <td>{{ row[4] }}</td>
       <td>{{ row[5] }}</td>
-      <td>{{ row[6] }}</td>
+      <td>{{ row[6]}}</td>
     </tr>
     {% endfor %}
   </tbody>
