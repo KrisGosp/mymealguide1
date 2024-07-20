@@ -40,7 +40,20 @@ a {
   font-size: 0.9rem;
   padding: 5px;
 }
-
 .cooking_button {
   margin-left: 10px;
+}
+
+/* Add Page */
+.add_form {
+  width: 70%;
+  margin: 0 auto;
+}
+.add_form h2 {
+  margin-bottom: 1.5rem;
+}
+.cooking_header {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 20px;
 }
