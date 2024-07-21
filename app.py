@@ -235,6 +235,12 @@ def profile(id):
     if user is None:
         return apology('User not found', 404)
     return render_template('profile.html', user=user, ingredients=['flour', 'sugar', 'butter'])
+
+@app.route('/history')
+def history():
+    rows = g.c.execute('SELECT * FROM history WHERE user_id = ?', (session['user_id'],)).fetchall()
+    return render_template('history.html', rows=rows)
+
 # Close the database connection when the application is terminated
 conn.commit()
 conn.close()
