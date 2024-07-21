@@ -26,6 +26,7 @@ c.execute("""
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         recipe_id INTEGER,
+        name TEXT,
         cooked_at TEXT,
         FOREIGN KEY(user_id) REFERENCES users(id),
         FOREIGN KEY(recipe_id) REFERENCES recipes(id)
