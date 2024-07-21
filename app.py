@@ -165,16 +165,16 @@ def add():
         if category not in CATEGORIES:
             return apology('Invalid category', 400)
         if last_cooked == 'yes':
-            today = datetime.now()
-            last_cooked = today.strptime('%d, %B %Y')
+            last_cooked = date.today().isoformat()
         elif last_cooked == 'no':
             last_cooked = ''
         print(name, desc, instructions, difficulty, category, price, total_time, last_cooked, rating)
         g.c.execute('INSERT INTO recipes (user_id, name, description, total_time, category, instructions, difficulty, rating, price, last_cooked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (session['user_id'], name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked))
 
         # Add to history if cooking now
-        new_recipe_id = c.lastrowid
-        g.c.execute('INSERT INTO history (user_id, recipe_id, name, cooked_at) VALUES (?, ?, ?)', (session['user_id'], new_recipe_id, name, last_cooked))
+        if last_cooked == 'yes':
+            new_recipe_id = c.lastrowid
+            g.c.execute('INSERT INTO history (user_id, recipe_id, name, cooked_at) VALUES (?, ?, ?, ?)', (session['user_id'], new_recipe_id, name, last_cooked))
 
         g.db.commit()
         return redirect('/')
