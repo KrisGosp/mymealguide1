@@ -1,146 +1,144 @@
 {% extends "layout.html" %} {% block title %} Add {% endblock %} {% block main
 %}
-<form action="/update/{{recipe[0]}}" method="post">
-  <div class="mb-3">
-    <input
-      class="form-control"
-      autofocus
-      name="name"
-      placeholder="{{ recipe[2]}}"
-      type="text"
-    />
-  </div>
-  <div class="mb-3">
-    <textarea
-      class="form-control"
-      id="desc"
-      name="desc"
-      rows="1"
-      placeholder="Description"
-    >
-{{ recipe[3]}}</textarea
-    >
-  </div>
-  <div class="mb-3">
-    <textarea
-      class="form-control"
-      id="instructions"
-      name="instructions"
-      rows="3"
-      placeholder="Instructions"
-    >
-{{ recipe[6]}}</textarea
-    >
-  </div>
+<div class="add_form">
+  <h2>Update recipe</h2>
+  <form action="/update/{{recipe[0]}}" method="post">
+    <div class="mb-3">
+      <input
+        class="form-control"
+        autofocus
+        name="name"
+        placeholder="{{ recipe[2]}}"
+        type="text"
+      />
+    </div>
+    <div class="mb-3">
+      <textarea
+        class="form-control"
+        id="desc"
+        name="desc"
+        rows="1"
+        placeholder="Description"
+      >
+  {{ recipe[3]}}</textarea
+      >
+    </div>
+    <div class="mb-3">
+      <textarea
+        class="form-control"
+        id="instructions"
+        name="instructions"
+        rows="3"
+        placeholder="Instructions"
+      >
+  {{ recipe[6]}}</textarea
+      >
+    </div>
 
-  <div class="mb-3">
-    <select
-      name="difficulty"
-      class="form-select"
-      aria-label="Default select example"
-    >
-      <option selected disabled>Difficulty: {{ recipe[7] }}</option>
-      <option value="1">Difficulty: One</option>
-      <option value="2">Difficulty: Two</option>
-      <option value="3">Difficulty: Three</option>
-    </select>
-  </div>
-  <div class="mb-3">
-    <select
-      name="category"
-      class="form-select"
-      aria-label="Default select example"
-    >
-      <option selected disabled>Category: {{ recipe[5]}}</option>
-      {% for cat in categories %}
-      <option value="{{cat}}">{{cat}}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="mb-3">
-    <select
-      name="price"
-      class="form-select"
-      aria-label="Default select example"
-    >
-      <option selected disabled>Price: {{ recipe[9]}}</option>
-      <option value="$">Price: $</option>
-      <option value="$$">Price: $$</option>
-      <option value="$$$">Price: $$$</option>
-    </select>
-  </div>
-  <div class="mb-3">
-    <input
-      class="form-control mx-auto w-auto"
-      name="total_time"
-      placeholder="{{ recipe[4]}}"
-      type="number"
-    />
-  </div>
-  <div class="mb-3">
-    <h2 class="fs-4">Rating: {{ recipe[8]}} Stars</h2>
+    <div class="mb-3">
+      <select
+        name="difficulty"
+        class="form-select"
+        aria-label="Default select example"
+      >
+        <option selected disabled>Difficulty: {{ recipe[7] }}</option>
+        <option value="1">Difficulty: One</option>
+        <option value="2">Difficulty: Two</option>
+        <option value="3">Difficulty: Three</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <select
+        name="category"
+        class="form-select"
+        aria-label="Default select example"
+      >
+        <option selected disabled>Category: {{ recipe[5]}}</option>
+        {% for cat in categories %}
+        <option value="{{cat}}">{{cat}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <select
+        name="price"
+        class="form-select"
+        aria-label="Default select example"
+      >
+        <option selected disabled>Price: {{ recipe[9]}}</option>
+        <option value="$">Price: $</option>
+        <option value="$$">Price: $$</option>
+        <option value="$$$">Price: $$$</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="total_time" class="form-label"
+        >Total cook time (in minutes)</label
+      >
+      <input
+        class="form-control mx-auto w-auto"
+        name="total_time"
+        placeholder="{{ recipe[4]}}"
+        type="number"
+      />
+    </div>
+    <div class="mb-3">
+      <h2 class="fs-5 mb-2 mt-4">Rating: {{ recipe[8]}} Stars</h2>
 
-    <div class="d-flex">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="option"
-          id="option1"
-          value="1"
-        />
-        <label class="form-check-label" for="option1"> 1 Star </label>
-      </div>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="option"
-          id="option2"
-          value="2"
-        />
-        <label class="form-check-label" for="option2"> 2 Stars </label>
-      </div>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="option"
-          id="option3"
-          value="3"
-        />
-        <label class="form-check-label" for="option3"> 3 Stars </label>
-      </div>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="option"
-          id="option4"
-          value="4"
-        />
-        <label class="form-check-label" for="option4"> 4 Stars </label>
-      </div>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="option"
-          id="option5"
-          value="5"
-        />
-        <label class="form-check-label" for="option5"> 5 Stars </label>
+      <div class="d-flex justify-content-center">
+        <div class="form-check mx-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="option"
+            id="option1"
+            value="1"
+          />
+          <label class="form-check-label" for="option1"> 1 Star </label>
+        </div>
+        <div class="form-check mx-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="option"
+            id="option2"
+            value="2"
+          />
+          <label class="form-check-label" for="option2"> 2 Stars </label>
+        </div>
+        <div class="form-check mx-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="option"
+            id="option3"
+            value="3"
+          />
+          <label class="form-check-label" for="option3"> 3 Stars </label>
+        </div>
+        <div class="form-check mx-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="option"
+            id="option4"
+            value="4"
+          />
+          <label class="form-check-label" for="option4"> 4 Stars </label>
+        </div>
+        <div class="form-check mx-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="option"
+            id="option5"
+            value="5"
+          />
+          <label class="form-check-label" for="option5"> 5 Stars </label>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="mb-3">
-    <input
-      class="form-control mx-auto w-auto"
-      name="last_cooked"
-      placeholder="{{ recipe[10]}}"
-      type="text"
-    />
-  </div>
-  <button class="btn btn-primary" type="submit">Add</button>
-</form>
+    <button class="btn btn-success px-5 mt-5" type="submit">Update</button>
+  </form>
+</div>
 {% endblock %}
