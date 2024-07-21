@@ -21,18 +21,6 @@ CATEGORIES = ['Breakfast', 'Main', 'Dessert', 'Side', 'Snack']
 COLUMNS = ['name', 'difficulty', 'rating', 'price', 'cooked']
 BCOLUMNS = ['name', 'category', 'difficulty', 'rating', 'price']
 
-c.execute(""" 
-    CREATE TABLE IF NOT EXISTS history (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        recipe_id INTEGER,
-        name TEXT,
-        cooked_at TEXT,
-        FOREIGN KEY(user_id) REFERENCES users(id),
-        FOREIGN KEY(recipe_id) REFERENCES recipes(id)
-    )""")
-
-
 # Implement thread-specific db connection
 @app.before_request
 def before_request():
@@ -181,6 +169,11 @@ def add():
             last_cooked = ''
         print(name, desc, instructions, difficulty, category, price, total_time, last_cooked, rating)
         g.c.execute('INSERT INTO recipes (user_id, name, description, total_time, category, instructions, difficulty, rating, price, last_cooked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (session['user_id'], name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked))
+
+        # Add to history if cooking now
+        new_recipe_id = c.lastrowid
+        g.c.execute('INSERT INTO history (user_id, recipe_id, name, cooked_at) VALUES (?, ?, ?)', (session['user_id'], new_recipe_id, name, last_cooked))
+
         g.db.commit()
         return redirect('/')
     return render_template('add.html', categories=CATEGORIES)
@@ -230,7 +223,9 @@ def cooking_now(id):
     cooking = request.args.get('cooking')
     if cooking == 'yes':
         g.c.execute('UPDATE recipes SET last_cooked = ? WHERE id = ?', (date.today().isoformat(), id))
-    
+        g.c.execute('SELECT name FROM recipes WHERE id = ?', (id,))
+        name = g.c.fetchone()[0]
+        g.c.execute('INSERT INTO history (user_id, recipe_id, name, cooked_at) VALUES (?, ?, ?, ?)', (session['user_id'], id, name, date.today().isoformat()))
     g.db.commit()
     return redirect('/recipe/' + str(id))
 
