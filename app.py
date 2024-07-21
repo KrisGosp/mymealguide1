@@ -111,6 +111,7 @@ def logout():
 
 # Sorting route
 @app.route('/sort')
+@login_required
 def sort():
     column = request.args.get('column', default='name').lower()
     way = request.args.get('way', default='ASC')
@@ -139,6 +140,7 @@ def sort():
 
 # Adding route
 @app.route('/add', methods=['GET', 'POST'])
+@login_required
 def add():
     if request.method == 'POST':
         name = request.form.get('name')
@@ -178,17 +180,15 @@ def add():
         return redirect('/')
     return render_template('add.html', categories=CATEGORIES)
 
-@app.route('/browse')
-def browse():
-    rows = g.c.execute('SELECT id, name, category, difficulty, rating, price FROM recipes').fetchall()
-    return render_template('browse.html', rows=rows, columns=BCOLUMNS)
 # Dynamic routes
 @app.route('/recipe/<int:id>')
+@login_required
 def recipe(id):
     row = g.c.execute('SELECT * FROM recipes WHERE id = ?', (id,)).fetchone()
     return render_template('recipe.html', row=row)
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update(id):
     recipe = g.c.execute('SELECT * FROM recipes WHERE id = ?', (id,)).fetchone()
     if recipe is None:
@@ -213,12 +213,14 @@ def update(id):
     return render_template('update.html', recipe=recipe, categories=CATEGORIES)
 
 @app.route('/delete/<int:id>')
+@login_required
 def delete(id):
     g.c.execute('DELETE FROM recipes WHERE id = ?', (id,))
     g.db.commit()
     return redirect('/')
 
 @app.route('/cooking_now/<int:id>')
+@login_required
 def cooking_now(id):
     cooking = request.args.get('cooking')
     if cooking == 'yes':
@@ -230,6 +232,7 @@ def cooking_now(id):
     return redirect('/recipe/' + str(id))
 
 @app.route('/profile/<int:id>')
+@login_required
 def profile(id):
     user = g.c.execute('SELECT * FROM users WHERE id = ?', (id,)).fetchone()
     if user is None:
@@ -237,6 +240,7 @@ def profile(id):
     return render_template('profile.html', user=user, ingredients=['flour', 'sugar', 'butter'])
 
 @app.route('/history')
+@login_required
 def history():
     rows = g.c.execute('SELECT * FROM history WHERE user_id = ?', (session['user_id'],)).fetchall()
     return render_template('history.html', rows=rows)
