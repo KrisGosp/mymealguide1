@@ -151,7 +151,7 @@ def add():
         price = request.form.get('price')
         total_time = request.form.get('total_time')
         rating = request.form.get('option')
-        last_cooked = request.form.get('cooking')
+        cooked = request.form.get('cooking')
         if not name or not desc or not instructions or not difficulty or not category or not price or not rating:
             return apology('Please fill in all fields', 400)
         if not total_time or not total_time.isnumeric():
@@ -164,15 +164,14 @@ def add():
             return apology('Invalid rating', 400)
         if category not in CATEGORIES:
             return apology('Invalid category', 400)
-        if last_cooked == 'yes':
+        if cooked == 'yes':
             last_cooked = date.today().isoformat()
-        elif last_cooked == 'no':
+        elif cooked == 'no':
             last_cooked = ''
-        print(name, desc, instructions, difficulty, category, price, total_time, last_cooked, rating)
         g.c.execute('INSERT INTO recipes (user_id, name, description, total_time, category, instructions, difficulty, rating, price, last_cooked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (session['user_id'], name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked))
 
         # Add to history if cooking now
-        if last_cooked == 'yes':
+        if cooked == 'yes':
             new_recipe_id = c.lastrowid
             g.c.execute('INSERT INTO history (user_id, recipe_id, name, cooked_at) VALUES (?, ?, ?, ?)', (session['user_id'], new_recipe_id, name, last_cooked))
 
@@ -203,8 +202,7 @@ def update(id):
         price = request.form.get('price')
         total_time = request.form.get('total_time')
         rating = request.form.get('option')
-        today = datetime.now()
-        last_cooked = today.strptime('%d, %B %Y')
+        last_cooked = date.today().isoformat()
 
         g.c.execute('UPDATE recipes SET name = ?, description = ?, total_time = ?, category = ?, instructions = ?, difficulty = ?, rating = ?, price = ?, last_cooked = ? WHERE id = ?', (name, desc, total_time, category, instructions, difficulty, rating, price, last_cooked, id))
         g.db.commit()
@@ -242,7 +240,7 @@ def profile(id):
 @app.route('/history')
 @login_required
 def history():
-    rows = g.c.execute('SELECT * FROM history WHERE user_id = ?', (session['user_id'],)).fetchall()
+    rows = g.c.execute('SELECT * FROM history WHERE user_id = ? ORDER BY id DESC', (session['user_id'],)).fetchall()
     return render_template('history.html', rows=rows)
 
 # Close the database connection when the application is terminated
